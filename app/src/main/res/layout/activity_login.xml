@@ -205,11 +205,29 @@
                     app:layout_constraintTop_toBottomOf="@id/llCheckVersionResult"/>
 
             <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/tlLogin"
+                    android:id="@+id/tlDatabase"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:layout_constraintStart_toStartOf="@id/spcLoginTop"
                     app:layout_constraintTop_toBottomOf="@id/spcLoginTop">
+
+                <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etDatabase"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/login_database_hint"
+                        android:imeOptions="actionNext"
+                        android:inputType="text"
+			android:nextFocusDown="@+id/etLogin"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tlLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintStart_toStartOf="@id/spcLoginTop"
+                    app:layout_constraintTop_toBottomOf="@id/tlDatabase">
 
                 <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etLogin"
@@ -231,7 +249,7 @@
                     app:passwordToggleEnabled="true">
 
                 <com.google.android.material.textfield.TextInputEditText
-                        android:id="@id/etPassword"
+                        android:id="@+id/etPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/login_password_hint"

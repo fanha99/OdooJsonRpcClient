@@ -149,8 +149,8 @@ class LoginActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            val database = binding.spDatabase.selectedItem
-            if (database == null || database.toString().isBlank()) {
+            val database = binding.etDatabase.text.toString()
+            if (database.isBlank()) {
                 showMessage(message = getString(R.string.login_database_error))
                 return@setOnClickListener
             }
@@ -197,7 +197,15 @@ class LoginActivity : AppCompatActivity() {
                     val versionInfo = response.body()!!
                     if (versionInfo.isSuccessful) {
                         if (versionInfo.result.serverVersionIsSupported) {
-                            getDbList(versionInfo)
+//                            getDbList(versionInfo)
+                            toggleCheckVersionWidgets(
+                                isSuccess = true, resultMessage = getString(
+                                    R.string.login_server_success,
+                                    versionInfo.result.serverVersion
+                                )
+                            )
+                            changeGroupLoginVisibility(View.VISIBLE)
+                            changeDbSpinnerVisibility(View.GONE)
                         } else {
                             toggleCheckVersionWidgets(
                                 isSuccess = false, resultMessage = getString(
@@ -340,6 +348,9 @@ class LoginActivity : AppCompatActivity() {
         binding.tlPassword.postEx {
             visibility = View.GONE
         }
+        binding.tlDatabase.postEx {
+            visibility = View.GONE
+        }
         binding.lblDatabase.postEx {
             visibility = View.GONE
         }
@@ -377,6 +388,9 @@ class LoginActivity : AppCompatActivity() {
             visibility = flag
         }
         binding.tlPassword.postEx {
+            visibility = flag
+        }
+        binding.tlDatabase.postEx {
             visibility = flag
         }
         binding.bn.postEx {

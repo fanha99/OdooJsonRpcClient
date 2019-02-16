@@ -43,7 +43,7 @@
     <string name="login_forgot_password">Forgot Password?</string>
     <string name="login_new_dealer">New Dealer?</string>
     <string name="login_action_sign_up">New Dealer? Sign up</string>
-    <string name="login_database_error">Please, Select database</string>
+    <string name="login_database_error">Please, Type database</string>
     <string name="login_credential_error">Wrong login/password</string>
     <string name="login_submit">Login</string>
     <string name="login_progress">Authenticating&#8230;</string>

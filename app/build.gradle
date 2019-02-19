@@ -25,7 +25,7 @@ android {
 
     compileSdkVersion 28
     defaultConfig {
-        applicationId "io.gripxtech.odoojsonrpcclient"
+        applicationId "vn.com.qqbee"
         minSdkVersion 17
         targetSdkVersion 28
         versionCode 4

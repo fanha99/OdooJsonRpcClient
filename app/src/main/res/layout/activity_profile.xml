@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="io.gripxtech.odoojsonrpcclient.UtilsKt" />
+        <import type="vn.com.qqbee.UtilsKt" />
 
         <variable
             name="user"
-            type="io.gripxtech.odoojsonrpcclient.core.OdooUser" />
+            type="vn.com.qqbee.core.OdooUser" />
     </data>
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout

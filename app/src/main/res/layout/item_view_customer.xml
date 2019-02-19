@@ -5,11 +5,11 @@
 
     <data>
 
-        <import type="io.gripxtech.odoojsonrpcclient.UtilsKt"/>
+        <import type="vn.com.qqbee.UtilsKt"/>
 
         <variable
                 name="customer"
-                type="io.gripxtech.odoojsonrpcclient.customer.entities.Customer"/>
+                type="vn.com.qqbee.customer.entities.Customer"/>
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

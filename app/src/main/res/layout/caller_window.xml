@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="vn.com.qqbee.UtilsKt"/>
+
+        <variable
+                name="customer"
+                type="vn.com.qqbee.customer.entities.Customer"/>
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <ImageView
+                android:id="@+id/imageSmall"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:image_small="@{UtilsKt.trimFalse(customer.imageSmall)}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:name="@{UtilsKt.trimFalse(customer.name)}"
+                tools:src="@mipmap/ic_launcher_round" tools:ignore="ContentDescription"
+                android:layout_marginStart="8dp"/>
+
+        <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="@{UtilsKt.trimFalse(customer.name)}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                app:layout_constraintStart_toEndOf="@+id/imageSmall"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="Aliasgar Vadivala"/>
+
+        <TextView
+                android:id="@+id/company_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:singleLine="true"
+                android:text="@{UtilsKt.trimFalse(customer.companyName)}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintStart_toEndOf="@+id/imageSmall"
+                app:layout_constraintTop_toBottomOf="@+id/name"
+                tools:text="Company"/>
+
+        <TextView
+                android:id="@+id/phone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@{UtilsKt.trimFalse(customer.phone)}"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:layout_constraintTop_toBottomOf="@+id/company_name"
+                app:layout_constraintStart_toEndOf="@+id/imageSmall"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:text="0983 800 321"/>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

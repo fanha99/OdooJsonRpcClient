@@ -9,6 +9,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.PixelFormat
+import android.os.Build
 import android.os.Handler
 import android.util.Base64
 import android.view.Gravity
@@ -18,11 +19,9 @@ import android.view.WindowManager
 import android.widget.ImageView
 
 import android.widget.TextView
-import vn.com.qqbee.App
-import vn.com.qqbee.GlideApp
-import vn.com.qqbee.R
 import vn.com.qqbee.customer.entities.Customer
 import timber.log.Timber
+import vn.com.qqbee.*
 
 class CallerWindow {
 
@@ -31,31 +30,42 @@ class CallerWindow {
     private var callerView:View? = null
 
     private val windowParams:WindowManager.LayoutParams get() {
-        val params = WindowManager.LayoutParams(
-        WindowManager.LayoutParams.MATCH_PARENT,
-        WindowManager.LayoutParams.WRAP_CONTENT,
-        WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
-            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
-                or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
-        PixelFormat.TRANSLUCENT)
+        val params = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.WRAP_CONTENT,
+            WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+            PixelFormat.TRANSLUCENT)
+        } else {
+            WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.WRAP_CONTENT,
+                WindowManager.LayoutParams.TYPE_TOAST,
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                        or WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                        or WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT)
+        }
         params.gravity = Gravity.CENTER
         return params
     }
 
-    @SuppressLint("InflateParams")
+    @SuppressLint("InflateParams", "TimberArgCount")
     private fun buildView(context:Context, customer: Customer): View {
-        val view = LayoutInflater.from(context).inflate(R.layout.item_view_customer, null)
+        val view = LayoutInflater.from(context).inflate(R.layout.caller_window, null)
+
         view.setBackgroundColor(Color.parseColor("#0288D1"))
         view.alpha = 0.85.toFloat()
+
         view.findViewById<TextView>(R.id.name).text = customer.name
         view.findViewById<TextView>(R.id.company_name).text = customer.companyName
         view.findViewById<TextView>(R.id.phone).text = customer.phone
-
-        val raw : ByteArray = Base64.decode(customer.imageSmall, Base64.DEFAULT)
-        view.findViewById<ImageView>(R.id.imageSmall).setImageBitmap(BitmapFactory.decodeByteArray( raw, 0, raw.size))
-        //val imageView: ImageView = view.findViewById<ImageView>(R.id.imageSmall)
-        //Customer.loadImage(imageView, customer.imageSmall, customer.name)
+        val imageView: ImageView = view.findViewById<ImageView>(R.id.imageSmall)
+        imageView.tag = null
+        Customer.loadImage(imageView, customer.imageSmall, customer.name)
         return view
     }
 
@@ -86,17 +96,6 @@ class CallerWindow {
             e.printStackTrace()
         }
 
-    }
-
-    companion object {
-
-        fun setText(parent_view:View, textview_id:Int, value:Any) {
-            val textView = parent_view.findViewById<View>(textview_id) as TextView
-            if (value is String || value is CharSequence)
-                textView.text = value.toString()
-            if (value is Int)
-                textView.setText(Integer.parseInt(value.toString()))
-        }
     }
 }
 

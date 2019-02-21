@@ -40,12 +40,12 @@
                 tools:text="Aliasgar Vadivala"/>
 
         <TextView
-                android:id="@+id/company_name"
+                android:id="@+id/parent_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:singleLine="true"
-                android:text="@{UtilsKt.trimFalse(customer.companyName)}"
+                android:text="@{UtilsKt.trimFalse(customer.parentName)}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:layout_constraintStart_toEndOf="@+id/imageSmall"
                 app:layout_constraintTop_toBottomOf="@+id/name"
@@ -60,7 +60,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 app:phone="@{UtilsKt.trimFalse(customer.phone)}"
                 app:mobile="@{UtilsKt.trimFalse(customer.mobile)}"
-                app:layout_constraintTop_toBottomOf="@+id/company_name"
+                app:layout_constraintTop_toBottomOf="@+id/parent_name"
                 app:layout_constraintStart_toEndOf="@+id/imageSmall"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="1234567890"/>

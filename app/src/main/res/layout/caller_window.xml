@@ -30,7 +30,7 @@
                 tools:text="Fanha Giang"/>
 
         <TextView
-                android:id="@+id/company_name"
+                android:id="@+id/parent_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
@@ -49,7 +49,7 @@
                 android:layout_marginBottom="8dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="#ffffff"
-                app:layout_constraintTop_toBottomOf="@+id/company_name"
+                app:layout_constraintTop_toBottomOf="@+id/parent_name"
                 app:layout_constraintStart_toEndOf="@+id/imageSmall"
                 app:layout_constraintBottom_toBottomOf="parent"
                 tools:text="1234567890"/>

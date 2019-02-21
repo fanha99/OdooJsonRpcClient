@@ -61,7 +61,7 @@ class CallerWindow {
         view.alpha = 0.85.toFloat()
 
         view.findViewById<TextView>(R.id.name).text = customer.name.trimFalse()
-        view.findViewById<TextView>(R.id.company_name).text = customer.companyName.trimFalse()
+        view.findViewById<TextView>(R.id.parent_name).text = customer.parentName.trimFalse()
         val phone = customer.phone.trimFalse()
         val mobile = customer.mobile.trimFalse()
         val phonemobile = phone + (if (phone.isNotEmpty() and mobile.isNotEmpty()) " / " else "") + mobile

@@ -70,7 +70,7 @@ class CallReceiver : PhonecallReceiver() {
     fun checkphonenumber(ctx: Context, number: String) {
         Odoo.searchRead(
             model = "res.partner", fields = listOf(
-                "id", "name", "email", "company_name", "image_small", "phone", "mobile"
+                "id", "name", "email", "parent_name", "parent_id", "phone", "mobile", "image_small"
             ),
             domain = listOf("|" , listOf("phone", "ilike", number), listOf("mobile", "ilike", number)),
             offset = 0, limit = 1, sort = ""

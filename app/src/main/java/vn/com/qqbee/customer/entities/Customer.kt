@@ -2,6 +2,7 @@ package vn.com.qqbee.customer.entities
 
 import android.util.Base64
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import com.google.gson.JsonElement
 import com.google.gson.annotations.Expose
@@ -79,6 +80,13 @@ data class Customer(
                 .dontAnimate()
                 .circleCrop()
                 .into(view)
+        }
+
+        @JvmStatic
+        @BindingAdapter("phone", "mobile")
+        fun loadPhone(view: TextView, phone: String, mobile: String) {
+            val phonemobile = phone + (if (phone.isNotEmpty() and mobile.isNotEmpty()) " / " else "") + mobile
+            view.text = phonemobile
         }
 
         @JvmField

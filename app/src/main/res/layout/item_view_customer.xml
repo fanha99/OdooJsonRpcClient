@@ -57,12 +57,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="@{UtilsKt.trimFalse(customer.phone)}"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                app:phone="@{UtilsKt.trimFalse(customer.phone)}"
+                app:mobile="@{UtilsKt.trimFalse(customer.mobile)}"
                 app:layout_constraintTop_toBottomOf="@+id/company_name"
                 app:layout_constraintStart_toEndOf="@+id/imageSmall"
                 app:layout_constraintBottom_toBottomOf="parent"
-                tools:text="0983 800 321"/>
+                tools:text="1234567890"/>
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

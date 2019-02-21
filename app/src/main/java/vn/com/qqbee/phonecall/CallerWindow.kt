@@ -11,7 +11,6 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Handler
-import android.util.Base64
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -60,12 +59,12 @@ class CallerWindow {
         view.setBackgroundColor(Color.parseColor("#0288D1"))
         view.alpha = 0.85.toFloat()
 
-        view.findViewById<TextView>(R.id.name).text = customer.name
-        view.findViewById<TextView>(R.id.company_name).text = customer.companyName
-        view.findViewById<TextView>(R.id.phone).text = customer.phone
+        view.findViewById<TextView>(R.id.name).text = customer.name.trimFalse()
+        view.findViewById<TextView>(R.id.company_name).text = customer.companyName.trimFalse()
+        view.findViewById<TextView>(R.id.phone).text = customer.phone.trimFalse()
         val imageView: ImageView = view.findViewById<ImageView>(R.id.imageSmall)
         imageView.tag = null
-        Customer.loadImage(imageView, customer.imageSmall, customer.name)
+        Customer.loadImage(imageView, customer.imageSmall.trimFalse(), customer.name)
         return view
     }
 

@@ -66,7 +66,7 @@ abstract class PhonecallReceiver : BroadcastReceiver() {
                 if (lastState != TelephonyManager.CALL_STATE_RINGING) {
                     isIncoming = false
                     callStartTime = Date()
-                    onOutgoingCallStarted(context, savedNumber, callStartTime)
+                    onOutgoingCallStarted(context, number, callStartTime)
                 } else {
                     isIncoming = true
                     callStartTime = Date()

@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.graphics.PixelFormat
 import android.os.Build
 import android.os.Handler
+import android.util.Base64
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -61,10 +62,24 @@ class CallerWindow {
 
         view.findViewById<TextView>(R.id.name).text = customer.name.trimFalse()
         view.findViewById<TextView>(R.id.company_name).text = customer.companyName.trimFalse()
-        view.findViewById<TextView>(R.id.phone).text = customer.phone.trimFalse()
+        val phone = customer.phone.trimFalse()
+        val mobile = customer.mobile.trimFalse()
+        val phonemobile = phone + (if (phone.isNotEmpty() and mobile.isNotEmpty()) " / " else "") + mobile
+        view.findViewById<TextView>(R.id.phone).text = phonemobile
         val imageView: ImageView = view.findViewById<ImageView>(R.id.imageSmall)
         imageView.tag = null
-        Customer.loadImage(imageView, customer.imageSmall.trimFalse(), customer.name)
+        GlideApp.with(view.context)
+            .asBitmap()
+            .load(
+                if (customer.imageSmall.trimFalse().isNotEmpty())
+                    Base64.decode(customer.imageSmall.trimFalse(), Base64.DEFAULT)
+                else
+                    (view.context.applicationContext as App)
+                        .getLetterTile(if (customer.name.trimFalse().isNotEmpty()) customer.name.trimFalse() else "X")
+            )
+            .dontAnimate()
+            .circleCrop()
+            .into(imageView)
         return view
     }
 

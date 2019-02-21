@@ -1,5 +1,6 @@
 package vn.com.qqbee.phonecall
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import com.google.gson.reflect.TypeToken
@@ -23,14 +24,14 @@ class CallReceiver : PhonecallReceiver() {
     }
 
     override fun onIncomingCallAnswered(ctx: Context, number: String, start: Date) {
-        Timber.i("incomming....")
+        Timber.i("incomming Answered....")
         val pnumber = number.trim().replace("\\s".toRegex() , "").replace("+", "")
         Timber.i( pnumber)
         checkphonenumber(ctx, pnumber)
     }
 
     override fun onOutgoingCallStarted(ctx: Context, number: String, start: Date) {
-        Timber.i( "out....")
+        Timber.i( "outgoing....")
         val pnumber = number.trim().replace("\\s".toRegex() , "").replace("+", "")
         Timber.i( pnumber)
         checkphonenumber(ctx, pnumber)
@@ -40,27 +41,36 @@ class CallReceiver : PhonecallReceiver() {
         Timber.i( "incomming end....")
         val pnumber = number.trim().replace("\\s".toRegex() , "").replace("+", "")
         Timber.i( pnumber)
-        if (callerWindow != null) callerWindow!!.dismiss()
+        if (callerWindow != null) {
+            callerWindow!!.dismiss()
+            callerWindow = null
+        }
     }
 
     override fun onOutgoingCallEnded(ctx: Context, number: String, start: Date, end: Date) {
-        Timber.i( "out going....")
+        Timber.i( "outgoing end....")
         val pnumber = number.trim().replace("\\s".toRegex() , "").replace("+", "")
         Timber.i( pnumber)
-        if (callerWindow != null) callerWindow!!.dismiss()
+        if (callerWindow != null) {
+            callerWindow!!.dismiss()
+            callerWindow = null
+        }
     }
 
     override fun onMissedCall(ctx: Context, number: String, start: Date) {
         Timber.i( "missing....")
         val pnumber = number.trim().replace("\\s".toRegex() , "").replace("+", "")
         Timber.i( pnumber)
-        if (callerWindow != null) callerWindow!!.dismiss()
+        if (callerWindow != null) {
+            callerWindow!!.dismiss()
+            callerWindow = null
+        }
     }
 
     fun checkphonenumber(ctx: Context, number: String) {
         Odoo.searchRead(
             model = "res.partner", fields = listOf(
-                "id", "name", "email", "company_name", "image_small", "phone"
+                "id", "name", "email", "company_name", "image_small", "phone", "mobile"
             ),
             domain = listOf("|" , listOf("phone", "ilike", number), listOf("mobile", "ilike", number)),
             offset = 0, limit = 1, sort = ""
@@ -97,6 +107,7 @@ class CallReceiver : PhonecallReceiver() {
 
     companion object {
 
+        @SuppressLint("StaticFieldLeak")
         internal var callerWindow: CallerWindow? = null
     }
 }

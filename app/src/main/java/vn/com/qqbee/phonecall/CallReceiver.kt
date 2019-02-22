@@ -84,9 +84,10 @@ class CallReceiver : PhonecallReceiver() {
                     val searchRead = response.body()!!
                     if (searchRead.isSuccessful) {
                         val items: ArrayList<Customer> = gson.fromJson(searchRead.result.records, customerListType)
-
-                        if (callerWindow == null) callerWindow = CallerWindow()
-                        callerWindow!!.show(ctx, items[0])
+                        if (items.size >= 1) {
+                            if (callerWindow == null) callerWindow = CallerWindow()
+                            callerWindow!!.show(ctx, items[0])
+                        } else {}
                         // ...
                     } else {
                         // Odoo specific error

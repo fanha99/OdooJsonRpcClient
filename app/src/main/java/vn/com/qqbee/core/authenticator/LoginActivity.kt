@@ -1,20 +1,17 @@
 package vn.com.qqbee.core.authenticator
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.databinding.DataBindingUtil
 import vn.com.qqbee.*
 import vn.com.qqbee.core.Odoo
 import vn.com.qqbee.core.entities.session.authenticate.AuthenticateResult
 import vn.com.qqbee.core.entities.webclient.versionInfo.VersionInfo
-import vn.com.qqbee.core.utils.LocaleHelper
+import vn.com.qqbee.core.utils.BaseActivity
 import vn.com.qqbee.core.utils.Retrofit2Helper
 import vn.com.qqbee.core.utils.android.ktx.addTextChangedListenerEx
 import vn.com.qqbee.core.utils.android.ktx.postEx
@@ -26,7 +23,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     companion object {
         init {
@@ -46,19 +43,6 @@ class LoginActivity : AppCompatActivity() {
     private var selfHostedUrl: Boolean = false
     private var preConfigDatabase: Boolean = false
     private var preConfigDatabaseName: String = ""
-
-    override fun attachBaseContext(newBase: Context?) {
-        if (newBase != null) {
-            super.attachBaseContext(LocaleHelper.setLocale(newBase))
-        } else {
-            super.attachBaseContext(newBase)
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        LocaleHelper.setLocale(this)
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

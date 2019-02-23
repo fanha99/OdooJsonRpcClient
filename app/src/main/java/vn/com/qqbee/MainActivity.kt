@@ -1,22 +1,20 @@
 package vn.com.qqbee
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import vn.com.qqbee.core.preferences.SettingsActivity
-import vn.com.qqbee.core.utils.LocaleHelper
+import vn.com.qqbee.core.utils.BaseActivity
 import vn.com.qqbee.core.utils.NavHeaderViewHolder
 import vn.com.qqbee.core.utils.android.ktx.postEx
 import vn.com.qqbee.customer.CustomerFragment
 import vn.com.qqbee.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     companion object {
         init {
@@ -45,14 +43,6 @@ class MainActivity : AppCompatActivity() {
 
     private val companyFragment: CustomerFragment by lazy {
         CustomerFragment.newInstance(CustomerFragment.Companion.CustomerType.Company)
-    }
-
-    override fun attachBaseContext(newBase: Context?) {
-        if (newBase != null) {
-            super.attachBaseContext(LocaleHelper.setLocale(newBase))
-        } else {
-            super.attachBaseContext(newBase)
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -130,7 +120,6 @@ class MainActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
-        LocaleHelper.setLocale(this)
     }
 
     private fun loadFragment(currentDrawerItemID: Int) {

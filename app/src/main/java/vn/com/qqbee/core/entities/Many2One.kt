@@ -7,7 +7,7 @@ import vn.com.qqbee.toJsonElement
 import vn.com.qqbee.toStringList
 
 data class Many2One(
-        private val jsonElement: JsonElement
+        private var jsonElement: JsonElement
 ) : Parcelable {
     val isManyToOne: Boolean
         get() = jsonElement.isJsonArray && jsonElement.asJsonArray.size() == 2

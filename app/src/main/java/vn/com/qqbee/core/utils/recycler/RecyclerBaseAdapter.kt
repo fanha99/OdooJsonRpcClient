@@ -5,15 +5,12 @@ import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.annotation.DrawableRes
-import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import vn.com.qqbee.R
 import vn.com.qqbee.core.utils.recycler.entities.*
-import vn.com.qqbee.databinding.ItemViewRecyclerEmptyBinding
-import vn.com.qqbee.databinding.ItemViewRecyclerErrorBinding
-import vn.com.qqbee.databinding.ItemViewRecyclerLessBinding
-import vn.com.qqbee.databinding.ItemViewRecyclerMoreBinding
+import kotlinx.android.synthetic.main.item_view_recycler_empty.view.*
+import kotlinx.android.synthetic.main.item_view_recycler_error.view.*
 
 
 abstract class RecyclerBaseAdapter(
@@ -82,40 +79,36 @@ abstract class RecyclerBaseAdapter(
         val inflater = LayoutInflater.from(parent.context)
         when (viewType) {
             VIEW_TYPE_EMPTY -> {
-                val binding = DataBindingUtil.inflate<ItemViewRecyclerEmptyBinding>(
-                        inflater,
+                val view = inflater.inflate(
                         R.layout.item_view_recycler_empty,
                         parent,
                         false
                 )
-                return EmptyViewHolder(binding)
+                return EmptyViewHolder(view)
             }
             VIEW_TYPE_ERROR -> {
-                val binding = DataBindingUtil.inflate<ItemViewRecyclerErrorBinding>(
-                        inflater,
+                val view = inflater.inflate(
                         R.layout.item_view_recycler_error,
                         parent,
                         false
                 )
-                return ErrorViewHolder(binding)
+                return ErrorViewHolder(view)
             }
             VIEW_TYPE_LESS -> {
-                val binding = DataBindingUtil.inflate<ItemViewRecyclerLessBinding>(
-                        inflater,
+                val view = inflater.inflate(
                         R.layout.item_view_recycler_less,
                         parent,
                         false
                 )
-                return LessViewHolder(binding)
+                return LessViewHolder(view)
             }
             VIEW_TYPE_MORE -> {
-                val binding = DataBindingUtil.inflate<ItemViewRecyclerMoreBinding>(
-                        inflater,
+                val view = inflater.inflate(
                         R.layout.item_view_recycler_more,
                         parent,
                         false
                 )
-                return MoreViewHolder(binding)
+                return MoreViewHolder(view)
             }
         }
         return super.createViewHolder(parent, viewType)
@@ -127,17 +120,17 @@ abstract class RecyclerBaseAdapter(
             VIEW_TYPE_EMPTY -> {
                 val holder = baseHolder as EmptyViewHolder
                 val item = items[position] as EmptyItem
-                holder.binding.tvMessage.text = item.message
+                holder.itemView.tvMessage.text = item.message
                 val drawableResId = item.drawableResId
                 if (drawableResId > 0) {
-                    holder.binding.ivIcon.setImageResource(drawableResId)
+                    holder.itemView.ivIcon.setImageResource(drawableResId)
                 }
             }
             VIEW_TYPE_ERROR -> {
                 val holder = baseHolder as ErrorViewHolder
                 val item = items[position] as ErrorItem
-                holder.binding.tvCause.text = item.message
-                holder.binding.bnRetry.setOnClickListener {
+                holder.itemView.tvCause.text = item.message
+                holder.itemView.bnRetry.setOnClickListener {
                     hideError()
                     pvtRetryListener?.invoke()
                 }
@@ -146,8 +139,7 @@ abstract class RecyclerBaseAdapter(
     }
 
     override fun getItemViewType(position: Int): Int {
-        val item = items[position]
-        return when (item) {
+        return when (val item = items[position]) {
             is EmptyItem -> {
                 VIEW_TYPE_EMPTY
             }

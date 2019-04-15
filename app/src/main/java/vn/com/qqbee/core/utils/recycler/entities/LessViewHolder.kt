@@ -1,8 +1,6 @@
 package vn.com.qqbee.core.utils.recycler.entities
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import vn.com.qqbee.databinding.ItemViewRecyclerLessBinding
 
-class LessViewHolder(
-        val binding: ItemViewRecyclerLessBinding
-) : RecyclerView.ViewHolder(binding.root)
+class LessViewHolder(view: View) : RecyclerView.ViewHolder(view)

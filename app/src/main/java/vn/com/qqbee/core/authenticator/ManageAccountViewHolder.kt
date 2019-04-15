@@ -1,8 +1,6 @@
 package vn.com.qqbee.core.authenticator
 
+import android.view.View
 import androidx.recyclerview.widget.RecyclerView
-import vn.com.qqbee.databinding.ItemViewManageAccountBinding
 
-class ManageAccountViewHolder(
-        val binding: ItemViewManageAccountBinding
-) : RecyclerView.ViewHolder(binding.root)
+class ManageAccountViewHolder(view: View) : RecyclerView.ViewHolder(view)

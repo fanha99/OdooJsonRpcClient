@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.res.Configuration
 import androidx.multidex.MultiDexApplication
 import vn.com.qqbee.core.Odoo
+import vn.com.qqbee.core.OdooDatabase
 import vn.com.qqbee.core.utils.CookiePrefs
 import vn.com.qqbee.core.utils.LetterTileProvider
 import vn.com.qqbee.core.utils.LocaleHelper
@@ -41,6 +42,7 @@ class App : MultiDexApplication() {
         super.onCreate()
         Retrofit2Helper.app = this
         Odoo.app = this
+        OdooDatabase.app = this
 
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())

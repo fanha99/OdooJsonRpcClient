@@ -10,6 +10,7 @@ import vn.com.qqbee.*
 import vn.com.qqbee.core.Odoo
 import vn.com.qqbee.core.OdooUser
 import vn.com.qqbee.core.entities.session.authenticate.AuthenticateResult
+import vn.com.qqbee.core.persistence.SyncWorker
 import vn.com.qqbee.core.utils.BaseActivity
 import vn.com.qqbee.core.utils.android.ktx.subscribeEx
 import io.reactivex.Observable
@@ -38,6 +39,8 @@ class SplashActivity : BaseActivity() {
         app = application as App
         compositeDisposable?.dispose()
         compositeDisposable = CompositeDisposable()
+
+        SyncWorker.initWorkManager()
     }
 
     override fun onPostResume() {

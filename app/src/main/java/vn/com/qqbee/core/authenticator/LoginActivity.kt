@@ -10,6 +10,7 @@ import vn.com.qqbee.*
 import vn.com.qqbee.core.Odoo
 import vn.com.qqbee.core.entities.session.authenticate.AuthenticateResult
 import vn.com.qqbee.core.entities.webclient.versionInfo.VersionInfo
+import vn.com.qqbee.core.persistence.SyncPrefs
 import vn.com.qqbee.core.utils.BaseActivity
 import vn.com.qqbee.core.utils.Retrofit2Helper
 import vn.com.qqbee.core.utils.android.ktx.addTextChangedListenerEx
@@ -438,6 +439,7 @@ class LoginActivity : BaseActivity() {
                     if (authenticate.isSuccessful) {
                         val authenticateResult = authenticate.result
                         authenticateResult.password = password
+                        SyncPrefs(this@LoginActivity).clear()
                         searchReadUserInfo(authenticateResult = authenticateResult)
                     } else {
                         val errorMessage = authenticate.errorMessage

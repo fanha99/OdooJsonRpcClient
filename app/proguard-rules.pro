@@ -58,6 +58,7 @@
 
 # Application classes that will be serialized/deserialized over Gson
 -keep class vn.com.qqbee.core.entities.** { *; }
+-keep class vn.com.qqbee.core.persistence.entities.** { *; }
 -keep interface vn.com.qqbee.core.web.** { *; }
 -keep class vn.com.qqbee.customer.entities.** { *; }
 

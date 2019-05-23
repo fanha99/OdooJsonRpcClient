@@ -12,6 +12,7 @@ import vn.com.qqbee.core.Odoo
 import vn.com.qqbee.core.OdooDatabase
 import vn.com.qqbee.core.entities.dataset.searchread.SearchRead
 import vn.com.qqbee.core.persistence.entities.Field
+import vn.com.qqbee.core.persistence.entities.LocalField
 import vn.com.qqbee.core.persistence.entities.Table
 import vn.com.qqbee.getOdooUsers
 import vn.com.qqbee.gson
@@ -138,6 +139,25 @@ class SyncWorker(
             return failure("no record found in query result on table name sqlite_master")
         }
 
+        for (i in 0 until tables.size) {
+            val table = tables[i]
+            val tableCursor = db.query("PRAGMA table_info('${table.name}')", null)
+                ?: return failure("null cursor returned by query on PRAGMA table_info('${table.name}')")
+
+            val tableData = JsonArray()
+            while (tableCursor.moveToNext()) {
+                val row = JsonObject()
+                for (i1 in 0 until tableCursor.columnCount) {
+                    row.addProperty(tableCursor.getColumnName(i1), tableCursor.getString(i1))
+                }
+                tableData.add(row)
+            }
+            tableCursor.close()
+
+            val localFields: List<LocalField> = gson.fromJson(tableData, object : TypeToken<List<LocalField>>() {}.type)
+            table.localFields = localFields
+        }
+
         val call = Odoo.fieldsGetW(
             models = tables.map { it.name },
             fields = listOf(
@@ -149,7 +169,10 @@ class SyncWorker(
                 "relation_field",
                 "relation_table",
                 "required"
-            )
+            ),
+            modelFields = tables.flatMap {
+                it.localFieldsName
+            }.toSet().toList()
         )
         val response: Response<SearchRead>?
         try {
@@ -182,7 +205,7 @@ class SyncWorker(
             }
         }
 
-
+        // TODO("Prioritize the table and find out missing table's if any")
 
         return Result.success(Data.Builder().build())
     }

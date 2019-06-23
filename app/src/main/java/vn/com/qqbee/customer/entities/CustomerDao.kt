@@ -1,9 +1,10 @@
 package vn.com.qqbee.customer.entities
 
 import androidx.room.*
+import vn.com.qqbee.core.persistence.OdooDao
 
 @Dao
-interface CustomerDao {
+interface CustomerDao : OdooDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCustomer(customer: Customer): Long
@@ -13,6 +14,9 @@ interface CustomerDao {
 
     @Query("SELECT * FROM `res.partner`")
     fun getCustomers(): List<Customer>
+
+    @Query("SELECT COUNT(*) FROM `res.partner`")
+    override fun getCount(): Int
 
     @Update(onConflict = OnConflictStrategy.ABORT)
     fun updateCustomer(customer: Customer): Int

@@ -6,7 +6,7 @@
 
     <!-- if host URL starts with http:// then set protocol to 0. -->
     <!-- if host URL starts with https:// then set protocol value to 1.-->
-    <integer name="protocol">0</integer>
+    <integer name="protocol">1</integer>
 
     <!-- set your host_url without leading http:// or https:// -->
     <string name="host_url" translatable="false">192.168.43.52:8069</string>

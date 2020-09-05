@@ -19,6 +19,7 @@ import android.view.WindowManager
 import android.widget.ImageView
 
 import android.widget.TextView
+import kotlinx.android.synthetic.main.item_view_customer.view.*
 import vn.com.qqbee.customer.entities.Customer
 import timber.log.Timber
 import vn.com.qqbee.*
@@ -65,7 +66,7 @@ class CallerWindow {
         val phone = customer.phone.trimFalse()
         val mobile = customer.mobile.trimFalse()
         val phonemobile = phone + (if (phone.isNotEmpty() and mobile.isNotEmpty()) " / " else "") + mobile
-        view.findViewById<TextView>(R.id.phone).text = phonemobile
+        view.findViewById<TextView>(R.id.phonemobile).text = phonemobile
         val imageView: ImageView = view.findViewById<ImageView>(R.id.imageSmall)
         imageView.tag = null
         GlideApp.with(view.context)

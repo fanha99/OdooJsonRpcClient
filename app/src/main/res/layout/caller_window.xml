@@ -43,7 +43,7 @@
                 tools:text="Company"/>
 
         <TextView
-                android:id="@+id/phone"
+                android:id="@+id/phonemobile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"

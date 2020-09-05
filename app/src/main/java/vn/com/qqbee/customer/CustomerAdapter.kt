@@ -61,7 +61,9 @@ class CustomerAdapter(
 
                 holder.itemView.name.text = name
                 holder.itemView.parent_name.text = item.parentName.trimFalse()
-                holder.itemView.phone.text = item.phone.trimFalse()
+                val phone = item.phone.trimFalse()
+                val mobile = item.mobile.trimFalse()
+                holder.itemView.phonemobile.text = phone + (if (phone.isNotEmpty() and mobile.isNotEmpty()) " / " else "") + mobile
 
                 if (!holder.itemView.clRoot.hasOnClickListeners()) {
                     holder.itemView.clRoot.setOnClickListener {

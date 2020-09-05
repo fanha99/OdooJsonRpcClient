@@ -91,6 +91,7 @@ object Odoo {
             field = value
             protocol = value.protocol
             host = value.host
+            OdooDatabase.database = null
         }
 
     @Suppress("PlatformExtensionReceiverOfInline")
@@ -118,6 +119,11 @@ object Odoo {
         protocol,
         host
     )
+
+    fun resetRetrofitClient() {
+        retrofit2Helper.resetClient()
+    }
+
     private val retrofit
         get() = retrofit2Helper.retrofit
 
@@ -353,7 +359,7 @@ object Odoo {
 
     fun create(
         model: String,
-        values: Map<String, Any>,
+        values: Any,
         kwArgs: Map<String, Any> = mapOf(),
         context: JsonObject = user.context,
         callback: ResponseObserver<Create>.() -> Unit
@@ -437,7 +443,7 @@ object Odoo {
     fun write(
         model: String,
         ids: List<Int>,
-        values: Map<String, Any>,
+        values: Any,
         kwArgs: Map<String, Any> = mapOf(),
         context: JsonObject = user.context,
         callback: ResponseObserver<Write>.() -> Unit

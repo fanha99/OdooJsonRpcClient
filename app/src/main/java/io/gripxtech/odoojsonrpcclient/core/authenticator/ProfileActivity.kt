@@ -1,48 +1,47 @@
 package io.gripxtech.odoojsonrpcclient.core.authenticator
 
-import android.content.Context
-import android.content.res.Configuration
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
-import io.gripxtech.odoojsonrpcclient.App
-import io.gripxtech.odoojsonrpcclient.R
-import io.gripxtech.odoojsonrpcclient.core.utils.LocaleHelper
-import io.gripxtech.odoojsonrpcclient.databinding.ActivityProfileBinding
-import io.gripxtech.odoojsonrpcclient.getActiveOdooUser
+import android.util.Base64
+import io.gripxtech.odoojsonrpcclient.*
+import io.gripxtech.odoojsonrpcclient.core.utils.BaseActivity
+import kotlinx.android.synthetic.main.activity_profile.*
 
-class ProfileActivity : AppCompatActivity() {
+class ProfileActivity : BaseActivity() {
 
     private lateinit var app: App
-    private lateinit var binding: ActivityProfileBinding
-
-    override fun attachBaseContext(newBase: Context?) {
-        if (newBase != null) {
-            super.attachBaseContext(LocaleHelper.setLocale(newBase))
-        } else {
-            super.attachBaseContext(newBase)
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        LocaleHelper.setLocale(this)
-    }
+    lateinit var glideRequests: GlideRequests
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         app = application as App
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_profile)
-        setSupportActionBar(binding.toolbar)
+        glideRequests = GlideApp.with(this)
+        setContentView(R.layout.activity_profile)
+        setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        binding.toolbar.setNavigationOnClickListener {
+        toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
 
         val user = getActiveOdooUser()
         if (user != null) {
-            binding.user = user
+            val imageSmall = user.imageSmall.trimFalse()
+            val name = user.name.trimFalse()
+
+            glideRequests.asBitmap().load(
+                if (imageSmall.isNotEmpty())
+                    Base64.decode(imageSmall, Base64.DEFAULT)
+                else
+                    app.getLetterTile(if (name.isNotEmpty()) name else "X")
+            ).circleCrop().into(ivProfile)
+
+            ctl.title = name
+            tvName.text = name
+            tvLogin.text = user.login
+            tvServerURL.text = user.host
+            tvDatabase.text = user.database
+            tvVersion.text = user.serverVersion
+            tvTimezone.text = user.timezone
         }
     }
 }

@@ -3,6 +3,7 @@
     <string name="nav_header_desc">Encabezado de navegación</string>
     <string name="ok">Bueno</string>
     <string name="cancel">Cancelar</string>
+    <string name="retry">Procesar de nuevo</string>
     <string name="fatal_error">Error fatal</string>
     <string name="generic_error">¡Algo salió mal!</string>
     <string name="operation_failed">Operación fallida</string>
@@ -63,6 +64,8 @@
     <string name="preference_build_summary">Versión %s</string>
     <string name="preference_language_title">Idioma</string>
     <string name="preference_language_summary">Elige tu idioma</string>
+    <string name="preference_logfile_title">Compartir la aplicación de archivo de registro</string>
+    <string name="preference_logfile">Aplicación de archivo de registro</string>
     <string name="preference_about_category">Acerca de</string>
     <string name="preference_organization_title">Desarrollado por</string>
     <string name="preference_privacy_policy_title">Política de privacidad</string>
@@ -80,7 +83,7 @@
     <!-- Network Connection Strings BEGIN -->
     <string name="network_alert_title">Conexión a Internet desactivada</string>
     <string name="network_alert_message">Activar conexión a internet</string>
-    <string name="create_account_error" translatable="false">%s no pudo crear una cuenta debido a %s. Por favor, cierre
+    <string name="create_account_error">%1$s no pudo crear una cuenta debido a %2$s. Por favor, cierre
         la sesión y vuelva a iniciar sesión
     </string>
     <string name="no_channel">No se ha encontrado ningún canal en el sistema.</string>

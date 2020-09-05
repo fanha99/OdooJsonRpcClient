@@ -1,32 +1,28 @@
 package io.gripxtech.odoojsonrpcclient.core.authenticator
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.content.res.Configuration
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.databinding.DataBindingUtil
 import io.gripxtech.odoojsonrpcclient.*
 import io.gripxtech.odoojsonrpcclient.core.Odoo
 import io.gripxtech.odoojsonrpcclient.core.entities.session.authenticate.AuthenticateResult
 import io.gripxtech.odoojsonrpcclient.core.entities.webclient.versionInfo.VersionInfo
-import io.gripxtech.odoojsonrpcclient.core.utils.LocaleHelper
+import io.gripxtech.odoojsonrpcclient.core.utils.BaseActivity
 import io.gripxtech.odoojsonrpcclient.core.utils.Retrofit2Helper
 import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.addTextChangedListenerEx
 import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.postEx
 import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.setOnItemSelectedListenerEx
 import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.subscribeEx
-import io.gripxtech.odoojsonrpcclient.databinding.ActivityLoginBinding
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity() {
 
     companion object {
         init {
@@ -41,29 +37,15 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private lateinit var app: App
-    private lateinit var binding: ActivityLoginBinding
     private var compositeDisposable: CompositeDisposable? = null
     private var selfHostedUrl: Boolean = false
     private var preConfigDatabase: Boolean = false
     private var preConfigDatabaseName: String = ""
 
-    override fun attachBaseContext(newBase: Context?) {
-        if (newBase != null) {
-            super.attachBaseContext(LocaleHelper.setLocale(newBase))
-        } else {
-            super.attachBaseContext(newBase)
-        }
-    }
-
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        LocaleHelper.setLocale(this)
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = application as App
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        setContentView(R.layout.activity_login)
         compositeDisposable?.dispose()
         compositeDisposable = CompositeDisposable()
         selfHostedUrl = resources.getBoolean(R.bool.self_hosted_url)
@@ -75,49 +57,49 @@ class LoginActivity : AppCompatActivity() {
         super.onPostCreate(savedInstanceState)
 
         if (selfHostedUrl) {
-            binding.grpCheckVersion.postEx {
+            grpCheckVersion.postEx {
                 visibility = View.VISIBLE
             }
-            binding.spProtocol.setOnItemSelectedListenerEx {
+            spProtocol.setOnItemSelectedListenerEx {
                 onItemSelected { _, _, _, _ ->
                     resetLoginLayout(resetCheckVersion = true)
                 }
             }
 
-            binding.tlHost.isErrorEnabled = false
+            tlHost.isErrorEnabled = false
 
-            binding.etHost.addTextChangedListenerEx {
+            etHost.addTextChangedListenerEx {
                 afterTextChanged {
-                    binding.tlHost.isErrorEnabled = false
+                    tlHost.isErrorEnabled = false
                     resetLoginLayout(resetCheckVersion = true)
                 }
             }
 
-            binding.bnCheckVersion.setOnClickListener {
-                val host = binding.etHost.text.toString().trim()
+            bnCheckVersion.setOnClickListener {
+                val host = etHost.text.toString().trim()
                 if (host.isBlank()) {
-                    binding.tlHost.error = getString(R.string.login_host_error)
+                    tlHost.error = getString(R.string.login_host_error)
                     return@setOnClickListener
                 }
 
                 val urls = host.extractWebUrls()
                 if (!(urls.size == 1 && urls[0] == host)) {
-                    binding.tlHost.error = getString(R.string.login_host_error2)
+                    tlHost.error = getString(R.string.login_host_error2)
                     return@setOnClickListener
                 }
 
                 if (host.startsWith("http")) {
-                    binding.tlHost.error = getString(R.string.login_host_error1)
+                    tlHost.error = getString(R.string.login_host_error1)
                     return@setOnClickListener
                 }
 
                 hideSoftKeyboard()
-                binding.spProtocol.isEnabled = false
-                binding.tlHost.isEnabled = false
-                binding.bnCheckVersion.isEnabled = false
+                spProtocol.isEnabled = false
+                tlHost.isEnabled = false
+                bnCheckVersion.isEnabled = false
                 resetLoginLayout(resetCheckVersion = false)
                 prepareUiForCheckVersion()
-                Odoo.protocol = when (binding.spProtocol.selectedItemPosition) {
+                Odoo.protocol = when (spProtocol.selectedItemPosition) {
                     0 -> {
                         Retrofit2Helper.Companion.Protocol.HTTP
                     }
@@ -125,7 +107,7 @@ class LoginActivity : AppCompatActivity() {
                         Retrofit2Helper.Companion.Protocol.HTTPS
                     }
                 }
-                Odoo.host = binding.etHost.text.toString()
+                Odoo.host = etHost.text.toString()
                 checkVersion()
             }
         } else {
@@ -142,20 +124,20 @@ class LoginActivity : AppCompatActivity() {
             checkVersion()
         }
 
-        binding.bn.setOnClickListener {
-            val login = binding.etLogin.text.toString()
+        bn.setOnClickListener {
+            val login = etLogin.text.toString()
             if (login.isBlank()) {
-                binding.tlLogin.error = getString(R.string.login_username_error)
+                tlLogin.error = getString(R.string.login_username_error)
                 return@setOnClickListener
             }
 
-            val password = binding.etPassword.text.toString()
+            val password = etPassword.text.toString()
             if (password.isBlank()) {
-                binding.tlPassword.error = getString(R.string.login_password_error)
+                tlPassword.error = getString(R.string.login_password_error)
                 return@setOnClickListener
             }
 
-            val database = binding.etDatabase.text.toString()
+            val database = etDatabase.text.toString()
             if (database.isBlank()) {
                 showMessage(message = getString(R.string.login_database_error))
                 return@setOnClickListener
@@ -168,26 +150,26 @@ class LoginActivity : AppCompatActivity() {
 
         val users = getOdooUsers()
         if (users.isNotEmpty()) {
-            binding.bnOtherAccount.postEx {
+            bnOtherAccount.postEx {
                 visibility = View.VISIBLE
             }
-            binding.bnOtherAccount.setOnClickListener {
+            bnOtherAccount.setOnClickListener {
                 startActivity(Intent(this@LoginActivity, ManageAccountActivity::class.java))
             }
         }
     }
 
     private fun prepareUiForCheckVersion() {
-        binding.llCheckingVersion.postEx {
+        llCheckingVersion.postEx {
             visibility = View.VISIBLE
         }
-        binding.llCheckVersionResult.postEx {
+        llCheckVersionResult.postEx {
             visibility = View.GONE
         }
-        binding.ivCheckVersionResultSuccess.postEx {
+        ivCheckVersionResultSuccess.postEx {
             visibility = View.GONE
         }
-        binding.ivCheckVersionResultFail.postEx {
+        ivCheckVersionResultFail.postEx {
             visibility = View.GONE
         }
     }
@@ -257,7 +239,7 @@ class LoginActivity : AppCompatActivity() {
                             )
                         )
                         if (preConfigDatabase && listDb.result.contains(preConfigDatabaseName)) {
-                            binding.spDatabase.adapter = ArrayAdapter<String>(
+                            spDatabase.adapter = ArrayAdapter<String>(
                                 this@LoginActivity,
                                 R.layout.support_simple_spinner_dropdown_item,
                                 listOf(preConfigDatabaseName)
@@ -265,7 +247,7 @@ class LoginActivity : AppCompatActivity() {
                             changeGroupLoginVisibility(View.VISIBLE)
                             changeDbSpinnerVisibility(View.GONE)
                         } else {
-                            binding.spDatabase.adapter = ArrayAdapter<String>(
+                            spDatabase.adapter = ArrayAdapter<String>(
                                 this@LoginActivity,
                                 R.layout.support_simple_spinner_dropdown_item,
                                 listDb.result
@@ -294,88 +276,88 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun toggleCheckVersionWidgets(isSuccess: Boolean, resultMessage: String) {
-        binding.spProtocol.isEnabled = true
-        binding.tlHost.isEnabled = true
-        binding.bnCheckVersion.isEnabled = true
-        binding.llCheckingVersion.postEx {
+        spProtocol.isEnabled = true
+        tlHost.isEnabled = true
+        bnCheckVersion.isEnabled = true
+        llCheckingVersion.postEx {
             visibility = View.GONE
         }
-        binding.llCheckVersionResult.postEx {
+        llCheckVersionResult.postEx {
             visibility = View.VISIBLE
         }
 
         if (isSuccess) {
-            binding.ivCheckVersionResultSuccess.postEx {
+            ivCheckVersionResultSuccess.postEx {
                 visibility = View.VISIBLE
             }
-            binding.ivCheckVersionResultFail.postEx {
+            ivCheckVersionResultFail.postEx {
                 visibility = View.GONE
             }
         } else {
-            binding.ivCheckVersionResultSuccess.postEx {
+            ivCheckVersionResultSuccess.postEx {
                 visibility = View.GONE
             }
-            binding.ivCheckVersionResultFail.postEx {
+            ivCheckVersionResultFail.postEx {
                 visibility = View.VISIBLE
             }
         }
-        binding.tvCheckVersionResultMessage.text = resultMessage
+        tvCheckVersionResultMessage.text = resultMessage
     }
 
     private fun resetLoginLayout(resetCheckVersion: Boolean = false) {
         if (resetCheckVersion) {
-            binding.llCheckingVersion.postEx {
+            llCheckingVersion.postEx {
                 visibility = View.GONE
             }
-            binding.llCheckVersionResult.postEx {
+            llCheckVersionResult.postEx {
                 visibility = View.GONE
             }
-            binding.ivCheckVersionResultSuccess.postEx {
+            ivCheckVersionResultSuccess.postEx {
                 visibility = View.GONE
             }
-            binding.ivCheckVersionResultFail.postEx {
+            ivCheckVersionResultFail.postEx {
                 visibility = View.GONE
             }
         }
         // changeDbSpinnerVisibility(View.GONE)
-        binding.spDatabase.adapter.run {
+        spDatabase.adapter.run {
             when (this) {
                 is ArrayAdapter<*> -> {
                     this.clear()
                 }
             }
         }
-        binding.spcLoginTop.postEx {
+        spcLoginTop.postEx {
             visibility = View.GONE
         }
-        binding.tlLogin.postEx {
+        tlLogin.postEx {
             visibility = View.GONE
         }
-        binding.tlPassword.postEx {
+        tlPassword.postEx {
             visibility = View.GONE
         }
-        binding.tlDatabase.postEx {
+        tlDatabase.postEx {
             visibility = View.GONE
         }
-        binding.lblDatabase.postEx {
+        lblDatabase.postEx {
             visibility = View.GONE
         }
-        binding.spcDatabaseTop.postEx {
+        spcDatabaseTop.postEx {
             visibility = View.GONE
         }
-        binding.spDatabase.postEx {
+        spDatabase.postEx {
             visibility = View.GONE
         }
-        binding.spcDatabaseBottom.postEx {
+        spcDatabaseBottom.postEx {
             visibility = View.GONE
         }
-        binding.bn.postEx {
+        bn.postEx {
             visibility = View.GONE
         }
-        binding.llLoginProgress.postEx {
+        llLoginProgress.postEx {
             visibility = View.GONE
         }
-        binding.llLoginError.postEx {
+        llLoginError.postEx {
             visibility = View.GONE
         }
     }
@@ -387,19 +369,19 @@ class LoginActivity : AppCompatActivity() {
      * @attr ref android.R.styleable#View_visibility
      */
     private fun changeGroupLoginVisibility(flag: Int) {
-        binding.spcLoginTop.postEx {
+        spcLoginTop.postEx {
             visibility = flag
         }
-        binding.tlLogin.postEx {
+        tlLogin.postEx {
             visibility = flag
         }
-        binding.tlPassword.postEx {
+        tlPassword.postEx {
             visibility = flag
         }
-        binding.tlDatabase.postEx {
+        tlDatabase.postEx {
             visibility = flag
         }
-        binding.bn.postEx {
+        bn.postEx {
             visibility = flag
         }
     }
@@ -411,35 +393,35 @@ class LoginActivity : AppCompatActivity() {
      * @attr ref android.R.styleable#View_visibility
      */
     private fun changeDbSpinnerVisibility(flag: Int) {
-        binding.lblDatabase.postEx {
+        lblDatabase.postEx {
             visibility = flag
         }
-        binding.spcDatabaseTop.postEx {
+        spcDatabaseTop.postEx {
             visibility = flag
         }
-        binding.spDatabase.postEx {
+        spDatabase.postEx {
             visibility = flag
         }
-        binding.spcDatabaseBottom.postEx {
+        spcDatabaseBottom.postEx {
             visibility = flag
         }
     }
 
     private fun prepareUiForAuthenticate() {
         if (selfHostedUrl) {
-            binding.spProtocol.isEnabled = false
-            binding.tlHost.isEnabled = false
-            binding.bnCheckVersion.isEnabled = false
+            spProtocol.isEnabled = false
+            tlHost.isEnabled = false
+            bnCheckVersion.isEnabled = false
         }
-        binding.etLogin.isEnabled = false
-        binding.etPassword.isEnabled = false
-        binding.spDatabase.isEnabled = false
-        binding.bn.isEnabled = false
+        etLogin.isEnabled = false
+        etPassword.isEnabled = false
+        spDatabase.isEnabled = false
+        bn.isEnabled = false
 
-        binding.llLoginProgress.postEx {
+        llLoginProgress.postEx {
             visibility = View.VISIBLE
         }
-        binding.llLoginError.postEx {
+        llLoginError.postEx {
             visibility = View.GONE
         }
     }
@@ -516,7 +498,7 @@ class LoginActivity : AppCompatActivity() {
                                 authenticateResult.name = it
                             }
                         }
-                        binding.tvLoginProgress.text = getString(R.string.login_success)
+                        tvLoginProgress.text = getString(R.string.login_success)
                         createAccount(authenticateResult = authenticateResult)
                     } else {
                         toggleLoginWidgets(showErrorBody = true, errorMessage = searchRead.errorMessage)
@@ -538,24 +520,24 @@ class LoginActivity : AppCompatActivity() {
 
     private fun toggleLoginWidgets(showErrorBody: Boolean = false, errorMessage: String = "") {
         if (selfHostedUrl) {
-            binding.spProtocol.isEnabled = true
-            binding.tlHost.isEnabled = true
-            binding.bnCheckVersion.isEnabled = true
+            spProtocol.isEnabled = true
+            tlHost.isEnabled = true
+            bnCheckVersion.isEnabled = true
         }
-        binding.etLogin.isEnabled = true
-        binding.etPassword.isEnabled = true
-        binding.spDatabase.isEnabled = true
-        binding.bn.isEnabled = true
+        etLogin.isEnabled = true
+        etPassword.isEnabled = true
+        spDatabase.isEnabled = true
+        bn.isEnabled = true
 
-        binding.llLoginProgress.postEx {
+        llLoginProgress.postEx {
             visibility = View.GONE
         }
 
         if (showErrorBody) {
-            binding.llLoginError.postEx {
+            llLoginError.postEx {
                 visibility = View.VISIBLE
             }
-            binding.tvLoginError.text = errorMessage
+            tvLoginError.text = errorMessage
         }
     }
 
@@ -589,13 +571,13 @@ class LoginActivity : AppCompatActivity() {
                 onError { error ->
                     error.printStackTrace()
                     if (!isFinishing && !isDestroyed) {
-                        binding.llLoginProgress.postEx {
+                        llLoginProgress.postEx {
                             visibility = View.GONE
                         }
-                        binding.llLoginError.postEx {
+                        llLoginError.postEx {
                             visibility = View.VISIBLE
                         }
-                        binding.tvLoginError.postEx {
+                        tvLoginError.postEx {
                             text = getString(R.string.login_create_account_error)
                         }
                     }

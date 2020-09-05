@@ -1,22 +1,19 @@
 package io.gripxtech.odoojsonrpcclient
 
-import android.content.Context
 import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
-import androidx.databinding.DataBindingUtil
 import io.gripxtech.odoojsonrpcclient.core.preferences.SettingsActivity
-import io.gripxtech.odoojsonrpcclient.core.utils.LocaleHelper
+import io.gripxtech.odoojsonrpcclient.core.utils.BaseActivity
 import io.gripxtech.odoojsonrpcclient.core.utils.NavHeaderViewHolder
 import io.gripxtech.odoojsonrpcclient.core.utils.android.ktx.postEx
 import io.gripxtech.odoojsonrpcclient.customer.CustomerFragment
-import io.gripxtech.odoojsonrpcclient.databinding.ActivityMainBinding
+import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     companion object {
         init {
@@ -29,7 +26,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     lateinit var app: App private set
-    lateinit var binding: ActivityMainBinding private set
     private lateinit var drawerToggle: ActionBarDrawerToggle
     private lateinit var navHeader: NavHeaderViewHolder
 
@@ -47,42 +43,34 @@ class MainActivity : AppCompatActivity() {
         CustomerFragment.newInstance(CustomerFragment.Companion.CustomerType.Company)
     }
 
-    override fun attachBaseContext(newBase: Context?) {
-        if (newBase != null) {
-            super.attachBaseContext(LocaleHelper.setLocale(newBase))
-        } else {
-            super.attachBaseContext(newBase)
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         app = application as App
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        setContentView(R.layout.activity_main)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        setSupportActionBar(binding.tb)
+        setSupportActionBar(tb)
 
         supportActionBar?.apply {
             setHomeButtonEnabled(true)
             setDisplayHomeAsUpEnabled(true)
         }
 
-        binding.tb.setNavigationOnClickListener {
-            binding.dl.openDrawer(GravityCompat.START)
+        tb.setNavigationOnClickListener {
+            dl.openDrawer(GravityCompat.START)
         }
         setTitle(R.string.app_name)
 
         drawerToggle = ActionBarDrawerToggle(
-            this, binding.dl, binding.tb,
+            this, dl, tb,
             R.string.navigation_drawer_open, R.string.navigation_drawer_close
         )
-        binding.dl.addDrawerListener(drawerToggle)
+        dl.addDrawerListener(drawerToggle)
         drawerToggle.syncState()
 
-        val view = binding.nv.getHeaderView(0)
+        val view = nv.getHeaderView(0)
         if (view != null) {
             navHeader = NavHeaderViewHolder(view)
             val user = getActiveOdooUser()
@@ -91,8 +79,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.nv.setNavigationItemSelectedListener { item ->
-            binding.dl.postEx { closeDrawer(GravityCompat.START) }
+        nv.setNavigationItemSelectedListener { item ->
+            dl.postEx { closeDrawer(GravityCompat.START) }
             when (item.itemId) {
                 R.id.nav_customer -> {
                     if (currentDrawerItemID != ACTION_CUSTOMER) {
@@ -130,7 +118,6 @@ class MainActivity : AppCompatActivity() {
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         drawerToggle.onConfigurationChanged(newConfig)
-        LocaleHelper.setLocale(this)
     }
 
     private fun loadFragment(currentDrawerItemID: Int) {

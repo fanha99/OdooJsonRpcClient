@@ -26,7 +26,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "vn.com.qqbee"
-        minSdkVersion 17
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 7
         versionName "1.042"
